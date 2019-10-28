@@ -1,5 +1,8 @@
 package com.silverbars.application.rest.api;
 
+import static com.silverbars.application.constants.Constants.ERROR_CODE_ORDER_TYPE_INVALID;
+import static com.silverbars.application.constants.Constants.ERROR_MSG_ORDER_TYPE_INVALID;
+
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -14,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.silverbars.application.beans.OrderBean;
+import com.silverbars.application.beans.OrderRequest;
 import com.silverbars.application.beans.OrderSummaryBean;
 import com.silverbars.application.beans.OrderType;
 import com.silverbars.application.exception.ErrorBean;
@@ -22,13 +25,16 @@ import com.silverbars.application.exception.WebException;
 import com.silverbars.application.manager.OrderManager;
 
 /**
- * Rest API for order management
+ * Rest API for order management.
+ * All exceptions generated are handled by the WebExceptionHandler.
+ * 
+ * @see {@link com.silverbars.application.exception.WebExceptionHandler WebExceptionHandler}
  * 
  * @author Ankit
  *
  */
 @RestController
-@RequestMapping(value = "order")
+@RequestMapping(value = "orders")
 public class OrderController {
 
 	@Resource
@@ -36,8 +42,9 @@ public class OrderController {
 
 	/**
 	 * API to retrieve order summary for specified order type (BUY or SELL).
-	 * This method could have been implemented in another way - returning summary of all orders at once - 
-	 * but instead of designing API as per UI use case, this design suits more to REST style of API design.
+	 * This method could have been implemented in another way - returning
+	 * summary of all orders at once - but instead of designing API as per a
+	 * specific UI use case, this design suits more to REST style of API design.
 	 * 
 	 * @param orderType
 	 *            type of order
@@ -51,7 +58,8 @@ public class OrderController {
 		try {
 			type = OrderType.valueOf(orderType);
 		} catch (IllegalArgumentException ex) {
-			throw new WebException(new ErrorBean("4000101", "error.order.type.invalid"), HttpStatus.BAD_REQUEST);
+			throw new WebException(new ErrorBean(ERROR_CODE_ORDER_TYPE_INVALID, ERROR_MSG_ORDER_TYPE_INVALID),
+					HttpStatus.BAD_REQUEST);
 		}
 
 		List<OrderSummaryBean> orders = this.orderManager.getOrderSummary(type);
@@ -64,11 +72,13 @@ public class OrderController {
 	 * @param orderBean
 	 *            order request object
 	 * @return response entity with no body
+	 * @throws WebException if error in creating order
 	 */
 	@PostMapping
-	public ResponseEntity<Void> createOrder(@RequestBody OrderBean orderBean) {
+	public ResponseEntity<Void> createOrder(@RequestBody OrderRequest orderRequest) throws WebException {
 
-		this.orderManager.createOrder(orderBean);
+		this.orderManager.createOrder(orderRequest);
+		//can add location header to get created resource
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 

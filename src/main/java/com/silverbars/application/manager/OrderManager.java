@@ -3,6 +3,7 @@ package com.silverbars.application.manager;
 import java.util.List;
 
 import com.silverbars.application.beans.OrderBean;
+import com.silverbars.application.beans.OrderRequest;
 import com.silverbars.application.beans.OrderSummaryBean;
 import com.silverbars.application.beans.OrderType;
 import com.silverbars.application.exception.WebException;
@@ -19,10 +20,10 @@ public interface OrderManager {
 	 * method for registering a new order
 	 * @param order object with order details
 	 */
-	void createOrder(OrderBean order);
+	OrderBean createOrder(OrderRequest order) throws WebException;
 	
 	/**
-	 * method for retrieving summary of all orders
+	 * method for retrieving summary of orders of the specified type
 	 * 
 	 * @param orderType type of order
 	 * @return list of orders

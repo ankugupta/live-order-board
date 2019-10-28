@@ -1,5 +1,7 @@
 package com.silverbars.application.beans;
 
+import java.math.BigDecimal;
+
 /**
  * Model class for order summary
  * 
@@ -9,10 +11,10 @@ package com.silverbars.application.beans;
 public class OrderSummaryBean {
 
 	private Double quantityKg;
-	private Double pricePerKg;
+	private BigDecimal pricePerKg;
 	private OrderType orderType;
 
-	public OrderSummaryBean(Double quantityKg, Double pricePerKg, OrderType orderType) {
+	public OrderSummaryBean(Double quantityKg, BigDecimal pricePerKg, OrderType orderType) {
 		super();
 		this.quantityKg = quantityKg;
 		this.pricePerKg = pricePerKg;
@@ -27,11 +29,11 @@ public class OrderSummaryBean {
 		this.quantityKg = quantityKg;
 	}
 
-	public Double getPricePerKg() {
+	public BigDecimal getPricePerKg() {
 		return pricePerKg;
 	}
 
-	public void setPricePerKg(Double pricePerKg) {
+	public void setPricePerKg(BigDecimal pricePerKg) {
 		this.pricePerKg = pricePerKg;
 	}
 
